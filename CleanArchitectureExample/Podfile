@@ -1,0 +1,30 @@
+# coding: utf-8
+# Uncomment this line to define a global platform for your project
+platform :ios, '10.0'
+
+source 'https://github.com/CocoaPods/Specs.git'
+
+project 'CleanArchitectureExample.xcodeproj'
+
+workspace 'CleanArchitectureExample'
+
+use_frameworks!
+
+def import_pods
+  pod 'Alamofire', '~> 4.3.0'
+  pod 'SwiftyJSON', '~> 3.1.4'
+  pod 'BrightFutures', '~> 5.1.0'
+  pod 'ObjectMapper'
+end
+
+target 'CleanArchitectureExample' do
+  import_pods
+end
+
+target 'CleanArchitectureExampleTests' do
+  pod 'OHHTTPStubs', '~> 5.2.0'
+  pod 'Quick', '~> 1.0.0'
+  pod 'Nimble', '~> 5.1.1'
+  import_pods
+end
+

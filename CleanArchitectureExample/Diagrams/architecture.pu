@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor customer
+
+rectangle Presentation {
+  customer - (View)
+  (View) --> (Presenter) : call
+  (Builder) ..> (Presenter) : build
+  (Builder) ..> (View) : build
+  (Presenter) --> (Wireframe) : include
+  (Presenter) --> (ViewModel)
+  (Wireframe) ..> (View) : include
+}
+
+rectangle Domain {
+  (Presenter) -> (UseCase)
+  (UseCase) --> (Repository) 
+  (UseCase) --> (Translater)
+  (UseCase) --> (Model) : instance
+  (Translater) -> (Model) : translater
+}
+
+rectangle Data {
+  (Repository) -> (DataStore)
+  (DataStore) --> (Entity)
+  (DataStore) .> (Netwrk) : include
+  (Translater) -> (Entity) : translater
+}
+@enduml
