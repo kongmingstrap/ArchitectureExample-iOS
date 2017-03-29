@@ -131,19 +131,14 @@ final class TodoListUseCaseSpec: QuickSpec {
         describe("fetchTodos method") {
             context("result") {
                 it("call fetchTodos") {
-                    var call = false
                     
                     waitUntil(action: { done in
                         
-                        useCase.fetchTodos {
-                            call = true
+                        useCase.fetchTodos { todos in
+                            expect(todos!.count).to(equal(5))
                             done()
                         }
                     })
-                    
-                    expect(call).to(beTrue())
-                    
-                    
                 }
             }
         }

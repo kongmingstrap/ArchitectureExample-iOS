@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct RootPresenter {
+final class RootPresenter {
     
     private let wireframe: RootWireframe
     

@@ -9,10 +9,10 @@
 import UIKit
 
 struct TodoDetailBuilder {
-    static func inject(with viewController: UIViewController, viewModel: TodoModel) {
+    static func inject(with viewController: UIViewController, viewModel: TodoViewModel) {
         let vc = viewController as! TodoDetailViewController
-        let useCase = TodoDetailUseCaseImpl(todoModel: viewModel)
-        let presenter = TodoDetailPresenter(useCase: useCase)
+        let useCase = TodoDetailUseCaseImpl()
+        let presenter = TodoDetailPresenter(useCase: useCase, viewModel: viewModel)
         vc.inject(with: presenter)
     }
 }

@@ -8,10 +8,12 @@
 
 import UIKit
 
-struct TodoListPresenter {
+final class TodoListPresenter {
     
     private let useCase: TodoListUseCase
     private let wireframe: TodoListWireframe
+    private var todoViewModels: [TodoViewModel] = []
+    private var selectedRow: Int?
     
     public init(useCase: TodoListUseCase, wireframe: TodoListWireframe) {
         self.useCase = useCase
@@ -19,31 +21,34 @@ struct TodoListPresenter {
     }
     
     public func fetchTodoList(_ complition: ((Void) -> Void)?) {
-        useCase.fetchTodos { _ in
+        useCase.fetchTodos { [weak self] todos in
+            if let todos = todos {
+                self?.todoViewModels = todos.map { TodoViewModel(model: $0) }
+            }
             complition?()
         }
     }
     
     public func todosCount() -> Int {
-        return useCase.todos.count
+        return todoViewModels.count
     }
     
-    public func todo(from row: Int) -> TodoModel {
-        return useCase.todos[row]
+    public func todo(from row: Int) -> TodoViewModel {
+        return todoViewModels[row]
     }
     
     public func prepare(for segue: UIStoryboardSegue) {
-        if let todo = useCase.selectedTodo() {
-            wireframe.showTodoDetail(to: segue.destination, model: todo)
-            deselectTodo()
+        if let todoViewModel = selectedRow.map({ row in todoViewModels[row] }) {
+            wireframe.showTodoDetail(to: segue.destination, viewModel: todoViewModel)
+            deselectRow()
         }
     }
     
     public func select(_ row: Int) {
-        useCase.select(row)
+        selectedRow = row
     }
     
-    public func deselectTodo() {
-        useCase.deselect()
+    public func deselectRow() {
+        selectedRow = nil
     }
 }

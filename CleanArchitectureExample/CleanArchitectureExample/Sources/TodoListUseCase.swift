@@ -8,58 +8,32 @@
 
 import Foundation
 
-typealias TodoListComplitionHandler = (Void) -> Void
+typealias TodoListComplitionHandler = ([TodoModel]?) -> Void
 
 // MARK: - Interface
 protocol TodoListUseCase {
-    var todos: [TodoModel] { get }
     func fetchTodos(_ complite: TodoListComplitionHandler?)
-    func select(_ row: Int)
-    func deselect()
-    func selectedTodo() -> TodoModel?
 }
 
 // MARK: - Implementation
-final class TodoListUseCaseImpl: TodoListUseCase {
+struct TodoListUseCaseImpl: TodoListUseCase {
     
     private let todoRepository: TodoRepository
-    private var todoModels: [TodoModel] = []
-    
-    var todos: [TodoModel] {
-        get {
-            return todoModels
-        }
-    }
-    
-    private var selected: Int? = nil
     
     public init(todoRepository: TodoRepository) {
         self.todoRepository = todoRepository
     }
     
     public func fetchTodos(_ compliton: TodoListComplitionHandler?) {
-        todoRepository.get { [weak self] result in
+        todoRepository.get { result in
             switch result {
             case .success(let value):
-                self?.todoModels = try! TodoTranslator().translate(value)
+                let todoModels = try! TodoTranslator().translate(value)
+                compliton?(todoModels)
             case .failure(let error):
                 print(error)
+                compliton?(nil)
             }
-            compliton?()
-        }
-    }
-    
-    public func select(_ row: Int) {
-        selected = row
-    }
-    
-    public func deselect() {
-        selected = nil
-    }
-    
-    public func selectedTodo() -> TodoModel? {
-        return selected.map { row -> TodoModel in
-            todoModels[row]
         }
     }
 }

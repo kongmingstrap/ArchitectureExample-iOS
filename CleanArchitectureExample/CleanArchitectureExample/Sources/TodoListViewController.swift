@@ -48,7 +48,7 @@ final class TodoListViewController: UITableViewController {
 
         let todo = presenter.todo(from: indexPath.row)
         cell.textLabel?.text = todo.title ?? ""
-        //cell.detailTextLabel?.text = todo.
+        cell.detailTextLabel?.text = todo.description ?? ""
 
         return cell
     }

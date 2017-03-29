@@ -14,7 +14,7 @@ public protocol TodoRepository {
 }
 
 // MARK: - Implementation
-struct TodoRepositoryImpl: TodoRepository {
+final class TodoRepositoryImpl: TodoRepository {
     private let dataStore: TodoDataStore
     
     public init(dataStore: TodoDataStore) {
